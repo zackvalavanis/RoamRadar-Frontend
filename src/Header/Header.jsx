@@ -7,7 +7,7 @@ export function Header () {
       <header>
       <h1>
         <Link to='/'>HomePage</Link>
-        <Link to='/Cities's>Cities</Link>
+        <Link to='/Cities'>Cities</Link>
         Roam Radar
       </h1>
       </header>
