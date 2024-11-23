@@ -1,7 +1,9 @@
+import './Footer.css'
+
 export function Footer () { 
   return ( 
-    <div>
-      <h1>
+    <div className='footer'>
+      <h1 className='text'>
         Copyright 2024
       </h1>
     </div>

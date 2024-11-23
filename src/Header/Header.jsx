@@ -1,9 +1,14 @@
+import './Header.css'
+// import { Link } from 'react-router-dom'
+
 export function Header () { 
   return ( 
     <div>
+      <header>
       <h1>
-        Yo YO YO
+        Roam Radar
       </h1>
+      </header>
     </div>
   )
 }
