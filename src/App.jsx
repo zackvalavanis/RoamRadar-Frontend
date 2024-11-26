@@ -5,6 +5,7 @@ import { HomePage } from './HomePage/HomePage.jsx'
 import { CitiesPage } from './CitiesPage/CitiesPage.jsx'
 import { LoginPage } from './Login/LoginPage.jsx'
 import { SignupPage } from './Signup/SignupPage.jsx'
+import { AuthProvider } from './AuthenticationProvider/AuthProvider.jsx'
 import { createBrowserRouter, RouterProvider, Outlet} from 'react-router-dom'
 
 
@@ -42,7 +43,9 @@ function App() {
 
 
   return (
-    <RouterProvider router={router}/>
+    <AuthProvider>
+      <RouterProvider router={router}/>
+    </AuthProvider>
   )
 }
 

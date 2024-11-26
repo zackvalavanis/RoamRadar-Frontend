@@ -1,6 +1,7 @@
 import axios from 'axios'
 import { useState } from 'react'
 import './LoginPage.css'
+import { useAuth } from '../AuthenticationProvider/AuthProvider';
 
 const jwt = localStorage.getItem("jwt");
 if(jwt){ 
@@ -9,6 +10,7 @@ if(jwt){
 
 export function LoginPage () { 
   const [errors, setErrors] = useState([]);
+  const {login} = useAuth()
 
   const handleSubmit = (event) => { 
     event.preventDefault();
@@ -20,6 +22,7 @@ export function LoginPage () {
         console.log(response.data);
         axios.defaults.headers.common["Authorization"] = "Bearer " + response.data.jwt;
         localStorage.setItem("jwt", response.data.jwt)
+        login({ email: params.get('email'), jwt: response.data.jwt})
         event.target.reset();
       })
       .catch((error) => { 
