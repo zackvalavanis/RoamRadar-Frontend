@@ -33,6 +33,7 @@ export function CitiesPage () {
             <div key={city.id}>
               <h2>{city.name}</h2>
               <h3>{city.location}</h3>
+              Comments: 
               {city.comments.length > 0 ? 
               <ul>
                 {city.comments.map((comment) => (
