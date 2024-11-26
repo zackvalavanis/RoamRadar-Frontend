@@ -3,6 +3,7 @@ import { Header } from './Header/Header.jsx'
 import { Footer } from './Footer/Footer.jsx'
 import { HomePage } from './HomePage/HomePage.jsx'
 import { CitiesPage } from './CitiesPage/CitiesPage.jsx'
+import { LoginPage } from './Login/LoginPage.jsx'
 import { createBrowserRouter, RouterProvider, Outlet} from 'react-router-dom'
 
 
@@ -25,6 +26,10 @@ function App() {
         { 
           path: '/Cities',
           element: <CitiesPage />
+        }, 
+        { 
+          path: '/Login', 
+          element: <LoginPage />
         }
       ]
     }

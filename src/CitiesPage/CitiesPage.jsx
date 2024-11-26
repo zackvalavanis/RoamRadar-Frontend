@@ -12,9 +12,14 @@ export function CitiesPage () {
     } catch(error) { 
       console.error("Error fetching cities", error)
     }
-  }
+  };
 
-  useEffect(() => (handleIndex()), []);
+  useEffect(() => { 
+    const fetchData = async () => { 
+      await handleIndex();
+    };
+    fetchData();
+  }, [])
 
   return ( 
     <div>

@@ -8,6 +8,7 @@ export function Header () {
       <h1>
         <Link to='/'>HomePage</Link>
         <Link to='/Cities'>Cities</Link>
+        <Link to='/Login'>Login</Link>
         Roam Radar
       </h1>
       </header>
