@@ -4,6 +4,7 @@ import { Footer } from './Footer/Footer.jsx'
 import { HomePage } from './HomePage/HomePage.jsx'
 import { CitiesPage } from './CitiesPage/CitiesPage.jsx'
 import { LoginPage } from './Login/LoginPage.jsx'
+import { SignupPage } from './Signup/SignupPage.jsx'
 import { createBrowserRouter, RouterProvider, Outlet} from 'react-router-dom'
 
 
@@ -30,6 +31,10 @@ function App() {
         { 
           path: '/Login', 
           element: <LoginPage />
+        }, 
+        { 
+          path: '/Signup', 
+          element: <SignupPage />
         }
       ]
     }
