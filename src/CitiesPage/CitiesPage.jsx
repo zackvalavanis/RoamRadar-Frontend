@@ -1,16 +1,19 @@
 import axios from 'axios'
 import { useEffect, useState } from 'react'
+import { useAuth } from '../AuthenticationProvider/AuthProvider';
 
 export function CitiesPage () { 
   const [cities, setCities] = useState([])
+  const { auth } = useAuth();
   
+  console.log(auth.user_id)
 
   const handleComment = async (event) => { 
     event.preventDefault();
 
     const form = event.target
     const content = form.content.value;
-    const userId = form.user_id.value;
+    const userId = auth.id;
     const cityId = form.city_id.value;
     const params = { 
       content, 
@@ -68,10 +71,10 @@ export function CitiesPage () {
                   <input placeholder='type comment..' name='content' type='text'></input>
                 </div>
                 <div>
-                <input placeholder='user-id' name='user_id' type='text'/>
+                <input defaultValue={auth ? auth.user_id : ''} name='user_id' type='hidden'/>
                 </div>
                 <div>
-                  <input defaultValue={city.id} name='city_id' type='text'></input>
+                  <input defaultValue={city.id} name='city_id' type='hidden'></input>
                 </div>
                 <button type='submit'>Comment</button>
               </form>
