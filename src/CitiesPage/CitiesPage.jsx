@@ -5,6 +5,7 @@ import { useAuth } from '../AuthenticationProvider/AuthProvider';
 export function CitiesPage() { 
   const [cities, setCities] = useState([]);
   const { auth } = useAuth();
+  const [ cityName, setCityName] = useState('');
 
   const handleComment = async (event) => { 
     event.preventDefault();
@@ -52,8 +53,39 @@ export function CitiesPage() {
     fetchData();
   }, []);
 
+
+
+  const handleCreate = async (event) => { 
+    event.preventDefault();
+
+    const params = { 
+      city_name: cityName, 
+      user_id:  auth?.user_id,
+    }
+
+    try { 
+      var response = axios.post('http://localhost:3000/cities.json', params);
+      if (response.data.cities && response.data.cities.length > 1) {
+        // Show a list of cities for the user to select from
+        alert('Multiple cities found. Please select one!');
+        setCities(response.data.cities);
+      } else { 
+      await handleIndex();
+      }
+    } catch(error) { 
+      console.error('error fetching results.', error)
+    }
+  }
+
   return ( 
     <div>
+      <div>
+        <form onSubmit={handleCreate}>
+         Enter A City: <input name='city_name' type='text'></input>
+         <input name='user_id' defaultValue={auth && auth.user_id ? auth.user_id : ''} type='text' />
+         <button type='submit'>Create new</button>
+        </form> 
+      </div>
       <h1>Cities:</h1>
       <div>
         {cities.length > 0 ? (
