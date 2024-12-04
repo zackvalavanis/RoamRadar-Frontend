@@ -58,20 +58,21 @@ export function CitiesPage() {
   const handleCreate = async (event) => { 
     event.preventDefault();
 
+    if (!cityName) {
+      console.error('City name cannot be empty');
+      return; // Prevent submission if city name is empty
+    }
+
     const params = { 
       city_name: cityName, 
       user_id:  auth?.user_id,
     }
 
     try { 
-      var response = axios.post('http://localhost:3000/cities.json', params);
-      if (response.data.cities && response.data.cities.length > 1) {
-        // Show a list of cities for the user to select from
-        alert('Multiple cities found. Please select one!');
-        setCities(response.data.cities);
-      } else { 
+      var response = await axios.post('http://localhost:3000/cities.json', params);
+      console.log(response.data);
       await handleIndex();
-      }
+      setCityName('')
     } catch(error) { 
       console.error('error fetching results.', error)
     }
@@ -81,7 +82,13 @@ export function CitiesPage() {
     <div>
       <div>
         <form onSubmit={handleCreate}>
-         Enter A City: <input name='city_name' type='text'></input>
+         Enter A City: <input
+            name="city_name"
+            type="text"
+            value={cityName}
+            onChange={(e) => setCityName(e.target.value)} // Bind input to state
+            required 
+            />
          <input name='user_id' defaultValue={auth && auth.user_id ? auth.user_id : ''} type='text' />
          <button type='submit'>Create new</button>
         </form> 
