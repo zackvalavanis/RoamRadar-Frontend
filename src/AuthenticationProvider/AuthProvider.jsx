@@ -21,7 +21,7 @@ export const AuthProvider = ({ children }) => {
   };
 
   const logout = () => {
-    setAuth(null);
+    setAuth({ user_id: null, id: null });
     localStorage.removeItem('jwt'); // Remove JWT from localStorage
     localStorage.removeItem('user'); // Remove user info from localStorage
   };

@@ -9,6 +9,7 @@ export function Logout () {
     delete axios.defaults.headers.common["Authorization"];
     localStorage.removeItem("jwt");
     logout();
+
     console.log('You have been logged out')
   }
 

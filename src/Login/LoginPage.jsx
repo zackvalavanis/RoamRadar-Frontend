@@ -2,6 +2,7 @@ import axios from 'axios';
 import { useState } from 'react';
 import './LoginPage.css';
 import { useAuth } from '../AuthenticationProvider/AuthProvider';
+import { useNavigate } from 'react-router-dom';
 
 const jwt = localStorage.getItem("jwt");
 if (jwt) { 
@@ -11,6 +12,7 @@ if (jwt) {
 export function LoginPage () { 
   const [errors, setErrors] = useState([]);
   const { login } = useAuth();
+  const navigate = useNavigate();
 
   const handleSubmit = (event) => { 
     event.preventDefault();
@@ -39,11 +41,12 @@ export function LoginPage () {
           console.error("No user ID in the response.");
         }
 
-        // Optionally, use context to set the user
         login({ email, user_id, jwt });
 
         console.log('You are logged in');
         event.target.reset();
+        navigate('/Cities')
+
       })
       .catch((error) => { 
         console.log(error.response);
