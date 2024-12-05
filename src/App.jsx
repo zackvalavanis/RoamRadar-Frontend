@@ -1,9 +1,11 @@
 import './App.css'
+import axios from 'axios'
 import { Header } from './Header/Header.jsx'
 import { Footer } from './Footer/Footer.jsx'
 import { HomePage } from './HomePage/HomePage.jsx'
 import { CitiesPage } from './CitiesPage/CitiesPage.jsx'
 import { LoginPage } from './Login/LoginPage.jsx'
+import { CityShow } from './CityShow/CityShow.jsx'
 import { SignupPage } from './Signup/SignupPage.jsx'
 import { AuthProvider } from './AuthenticationProvider/AuthProvider.jsx'
 import { createBrowserRouter, RouterProvider, Outlet} from 'react-router-dom'
@@ -36,6 +38,14 @@ function App() {
         { 
           path: '/Signup', 
           element: <SignupPage />
+        },
+        { 
+          path: '/CityShow/:id',
+          element: <CityShow />, 
+          loader: ({params}) => axios.get(`http://localhost:3000/cities/${params.id}.json`).then((response) => { 
+            console.log(response.data);
+            return response.data
+          })
         }
       ]
     }

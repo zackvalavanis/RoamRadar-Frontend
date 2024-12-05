@@ -1,11 +1,14 @@
 import axios from 'axios';
 import { useEffect, useState } from 'react';
 import { useAuth } from '../AuthenticationProvider/AuthProvider';
+import { useNavigate } from 'react-router-dom';
 
 export function CitiesPage() { 
   const [cities, setCities] = useState([]);
   const { auth } = useAuth();
   const [ cityName, setCityName] = useState('');
+  const [ content, setContent] = useState('')
+  const navigate = useNavigate();
 
   const handleComment = async (event) => { 
     event.preventDefault();
@@ -21,7 +24,7 @@ export function CitiesPage() {
     const userId = auth.user_id;  // User ID will be null if logged out
     const cityId = form.city_id.value;
     const params = { 
-      content, 
+      content: content, 
       user_id: userId,
       city_id: cityId
     };
@@ -30,6 +33,7 @@ export function CitiesPage() {
       const response = await axios.post('http://localhost:3000/comments.json', params);
       console.log(response.data);
       await handleIndex();
+      setContent('')
     } catch (error) { 
       console.error("Error posting comment", error);
     }
@@ -78,9 +82,16 @@ export function CitiesPage() {
     }
   }
 
+  const handleNavigate = async (cityId) => { 
+    navigate(`/CityShow/${cityId}`)
+  }
+
   return ( 
     <div>
       <div>
+      {!auth || !auth.user_id ? (
+                <p></p>
+              ) : (
         <form onSubmit={handleCreate}>
          Enter A City: <input
             name="city_name"
@@ -89,9 +100,10 @@ export function CitiesPage() {
             onChange={(e) => setCityName(e.target.value)} // Bind input to state
             required 
             />
-         <input name='user_id' defaultValue={auth && auth.user_id ? auth.user_id : ''} type='text' />
+         <input name='user_id' defaultValue={auth && auth.user_id ? auth.user_id : ''} type='hidden' />
          <button type='submit'>Create new</button>
         </form> 
+        )}
       </div>
       <h1>Cities:</h1>
       <div>
@@ -110,14 +122,12 @@ export function CitiesPage() {
               : ( 
                 <p>No comments yet. Be the first to comment!</p>
               )}
-
-              {/* Render different content based on user login status */}
               {!auth || !auth.user_id ? (
-                <p>Please log in to add a comment.</p>
+                <p></p>
               ) : (
                 <form onSubmit={handleComment}>
                   <div>
-                    <input placeholder='Type your comment...' name='content' type='text' required />
+                    <input placeholder='Type your comment...' name='content' type='text' value ={content} onChange={(e) => setContent(e.target.value)}required />
                   </div>
                   <div>
                     <input defaultValue={auth.user_id} name='user_id' type='hidden' />
@@ -128,6 +138,7 @@ export function CitiesPage() {
                   <button type='submit'>Comment</button>
                 </form>
               )}
+              <button onClick={() => handleNavigate(city.id)}>More Info</button>
             </div>
           ))
         ) : (
