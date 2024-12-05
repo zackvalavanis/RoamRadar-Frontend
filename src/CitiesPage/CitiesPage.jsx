@@ -9,6 +9,7 @@ export function CitiesPage() {
   const [ cityName, setCityName] = useState('');
   const [ content, setContent] = useState('')
   const navigate = useNavigate();
+  const apiUrl = import.meta.env.VITE_API_BASE_URL;
 
   const handleComment = async (event) => { 
     event.preventDefault();
@@ -28,9 +29,8 @@ export function CitiesPage() {
       user_id: userId,
       city_id: cityId
     };
-
     try { 
-      const response = await axios.post('http://localhost:3000/comments.json', params);
+      const response = await axios.post(`${apiUrl}/comments.json`, params);
       console.log(response.data);
       await handleIndex();
       setContent('')
@@ -42,8 +42,9 @@ export function CitiesPage() {
   const handleIndex = async () => {
     console.log("handleIndex");
     try { 
-      const response = await axios.get('http://localhost:3000/cities.json');
-      console.log(response.data);
+      const response = await axios.get(`${apiUrl}/cities.json`);
+      
+      console.log('API response:', response.data);
       setCities(response.data);
     } catch (error) { 
       console.error("Error fetching cities", error);
@@ -71,9 +72,8 @@ export function CitiesPage() {
       city_name: cityName, 
       user_id:  auth?.user_id,
     }
-
     try { 
-      var response = await axios.post('http://localhost:3000/cities.json', params);
+      var response = await axios.post(`${apiUrl}/cities.json`, params);
       console.log(response.data);
       await handleIndex();
       setCityName('')
