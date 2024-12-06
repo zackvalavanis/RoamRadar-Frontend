@@ -3,21 +3,28 @@ import { useState } from "react";
 
 export function SignupPage() {
   const [errors, setErrors] = useState([]);
-  const apiUrl = import.meta.env.VITE_API_BASE_URL
+  const apiUrl = import.meta.env.VITE_API_BASE_URL;
 
   const handleSubmit = (event) => {
     event.preventDefault();
     setErrors([]);
+    
     const params = new FormData(event.target);
+    const data = {};
+    
+    params.forEach((value, key) => {
+      data[key] = value;
+    });
+
     axios
-      .post(`${apiUrl}/users.json`, params)
+      .post(`${apiUrl}/users.json`, data)
       .then((response) => {
         console.log(response.data);
         event.target.reset();
       })
       .catch((error) => {
         console.log(error.response.data.errors);
-        setErrors(error.response.data.errors);
+        setErrors(error.response.data.errors || ['Unknown error']);
       });
   };
 
@@ -25,8 +32,8 @@ export function SignupPage() {
     <div id="signup">
       <h1>Signup</h1>
       <ul>
-        {errors.map((error) => (
-          <li key={error}>{error}</li>
+        {errors.map((error, index) => (
+          <li key={index}>{error}</li>
         ))}
       </ul>
       <form onSubmit={handleSubmit}>
