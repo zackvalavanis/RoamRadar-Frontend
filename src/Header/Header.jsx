@@ -1,5 +1,8 @@
 import { Disclosure } from '@headlessui/react';
 import { Bars3Icon, XMarkIcon } from '@heroicons/react/24/outline';
+// import { HomePage } from './HomePage/HomePage.jsx'
+// import { CitiesPage } from './CitiesPage/CitiesPage.jsx'
+// import { LoginPage } from './Login/LoginPage.jsx'
 
 const navigation = [
   { name: 'Home', href: '#', current: true },
@@ -26,11 +29,6 @@ export function Header() {
                   <Bars3Icon className="block h-6 w-6" aria-hidden="true" />
                 </Disclosure.Button>
               </div>
-              <div className="flex items-center justify-between w-full">
-                {/* Logo on the left with controlled size */}
-                <div className="flex-shrink-0 text-white text-lg font-bold">
-                  <a href="#">MyCompany</a>
-                </div>
 
                 {/* Desktop navigation */}
                 <div className="hidden sm:block">
@@ -65,7 +63,6 @@ export function Header() {
                 </div>
               </div>
             </div>
-          </div>
 
           {/* Mobile menu */}
           <Disclosure.Panel className="sm:hidden">
