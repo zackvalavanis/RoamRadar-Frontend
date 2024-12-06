@@ -12,6 +12,7 @@ import { createBrowserRouter, RouterProvider, Outlet} from 'react-router-dom'
 
 
 function App() {
+  const apiUrl = import.meta.env.VITE_API_BASE_URL
 
   const router = createBrowserRouter([
     {
@@ -42,7 +43,7 @@ function App() {
         { 
           path: '/CityShow/:id',
           element: <CityShow />, 
-          loader: ({params}) => axios.get(`http://localhost:3000/cities/${params.id}.json`).then((response) => { 
+          loader: ({params}) => axios.get(`${apiUrl}/cities/${params.id}.json`).then((response) => { 
             console.log(response.data);
             return response.data
           })

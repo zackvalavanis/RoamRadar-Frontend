@@ -13,6 +13,7 @@ export function LoginPage () {
   const [errors, setErrors] = useState([]);
   const { login } = useAuth();
   const navigate = useNavigate();
+  const apiUrl = import.meta.env.VITE_API_BASE_URL
 
   const handleSubmit = (event) => { 
     event.preventDefault();
@@ -20,7 +21,7 @@ export function LoginPage () {
     const params = new FormData(event.target);
     
     axios
-      .post("http://localhost:3000/sessions.json", params)
+      .post(`${apiUrl}/sessions.json`, params)
       .then((response) => { 
         console.log("Response data:", response.data); // Check the full response
         const { jwt, user_id, email } = response.data; // Use user_id instead of id

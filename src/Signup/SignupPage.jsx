@@ -3,13 +3,14 @@ import { useState } from "react";
 
 export function SignupPage() {
   const [errors, setErrors] = useState([]);
+  const apiUrl = import.meta.env.VITE_API_BASE_URL
 
   const handleSubmit = (event) => {
     event.preventDefault();
     setErrors([]);
     const params = new FormData(event.target);
     axios
-      .post("http://localhost:3000/users.json", params)
+      .post(`${apiUrl}/users.json`, params)
       .then((response) => {
         console.log(response.data);
         event.target.reset();
