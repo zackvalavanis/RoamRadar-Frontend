@@ -2,6 +2,7 @@ import axios from 'axios';
 import { useEffect, useState } from 'react';
 import { useAuth } from '../AuthenticationProvider/AuthProvider';
 import { useNavigate } from 'react-router-dom';
+import './CitiesPage.css'
 
 export function CitiesPage() { 
   const [cities, setCities] = useState([]);
@@ -86,65 +87,78 @@ export function CitiesPage() {
     navigate(`/CityShow/${cityId}`)
   }
 
-  return ( 
-    <div>
-      <div>
-      {!auth || !auth.user_id ? (
-                <p></p>
-              ) : (
-        <form onSubmit={handleCreate}>
-         Enter A City: <input
-            name="city_name"
-            type="text"
-            value={cityName}
-            onChange={(e) => setCityName(e.target.value)} // Bind input to state
-            required 
+  return (
+    <div className="min-h-screen flex flex-col justify-center items-center">
+      <div className="w-full max-w-md p-4">
+        {!auth || !auth.user_id ? (
+          <p></p>
+        ) : (
+          <form onSubmit={handleCreate} className="space-y-4 text-center">
+            <label htmlFor="city_name" className="block">Enter A City:</label>
+            <input
+              name="city_name"
+              type="text"
+              value={cityName}
+              onChange={(e) => setCityName(e.target.value)}
+              required 
+              className="w-full p-2 border border-gray-300 rounded"
             />
-         <input name='user_id' defaultValue={auth && auth.user_id ? auth.user_id : ''} type='hidden' />
-         <button type='submit'>Create new</button>
-        </form> 
+            <input name="user_id" defaultValue={auth && auth.user_id ? auth.user_id : ''} type="hidden" />
+            <button type="submit" className="w-[150px] inline-block bg-blue-500 text-white p-2 rounded mx-auto">Create new</button>
+          </form>
         )}
       </div>
-      <h1>Cities:</h1>
-      <div>
+  
+      <h1 className="text-center my-8">Cities:</h1>
+      <div className="w-full max-w-4xl px-4">
         {cities.length > 0 ? (
           cities.map((city) => (
-            <div key={city.id}>
-              <h2>{city.name}</h2>
-              <h3>{city.location}</h3>
-              Comments: 
+            <div key={city.id} className="mb-6 border p-4 rounded shadow">
+              <h2 className="text-center text-xl">{city.name}</h2>
+              <h3 className="text-center">{city.location}</h3>
+              <p className="mt-2 text-center">Comments:</p> 
               {city.comments.length > 0 ? 
-                <ul>
+                <ul className="text-center">
                   {city.comments.map((comment) => (
                     <li key={comment.id}>{comment.content}</li>
                   ))}
                 </ul>
-              : ( 
-                <p>No comments yet. Be the first to comment!</p>
+              : (
+                <p className="text-center">No comments yet. Be the first to comment!</p>
               )}
               {!auth || !auth.user_id ? (
                 <p></p>
               ) : (
-                <form onSubmit={handleComment}>
-                  <div>
-                    <input placeholder='Type your comment...' name='content' type='text' value ={content} onChange={(e) => setContent(e.target.value)}required />
+                <form className="cities-form space-y-4" onSubmit={handleComment}>
+                  <div className="comments-input text-center">
+                    <input 
+                      className="w-full md:w-[400px] mt-1 p-2 border border-gray-300 rounded"
+                      placeholder="Type your comment..."
+                      name="content"
+                      type="text"
+                      value={content}
+                      onChange={(e) => setContent(e.target.value)}
+                      required 
+                    />
                   </div>
                   <div>
-                    <input defaultValue={auth.user_id} name='user_id' type='hidden' />
+                    <input defaultValue={auth.user_id} name="user_id" type="hidden" />
                   </div>
                   <div>
-                    <input defaultValue={city.id} name='city_id' type='hidden' />
+                    <input defaultValue={city.id} name="city_id" type="hidden" />
                   </div>
-                  <button type='submit'>Comment</button>
+                  <button className="w-[150px] inline-block bg-blue-500 text-white p-2 rounded mx-auto" type="submit">Comment</button>
                 </form>
               )}
-              <button onClick={() => handleNavigate(city.id)}>More Info</button>
+              <div className='cities-form-2'> 
+              <button className="w-[150px] inline-block bg-blue-500 text-white p-2 rounded mx-auto" onClick={() => handleNavigate(city.id)}>More Info</button>
+              </div>
             </div>
           ))
         ) : (
-          <p>No cities available.</p>
+          <p className="text-center">No cities available.</p>
         )}
       </div>
     </div>
   );
-}
+}  

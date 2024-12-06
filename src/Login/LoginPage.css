@@ -1,0 +1,29 @@
+.button-login {
+  display: flex; 
+  flex-direction: column;
+  align-items: center;  /* Center the items vertically */
+  justify-content: center; /* Center horizontally */
+  margin-bottom: 1rem;  /* Optional: Add some margin for spacing */
+  padding:20px
+}
+
+.form-login { 
+  display: flex;   
+  flex-direction: column;     
+  align-items: center;  
+  justify-content: center; 
+  margin-bottom: 1rem; 
+}
+
+.loginpage { 
+  display: flex;   
+  flex-direction: column;     
+  align-items: center;  
+  justify-content: center; 
+  margin-bottom: 1rem; 
+  padding: 40px;
+}
+
+.header-login { 
+  padding: 40px;
+}

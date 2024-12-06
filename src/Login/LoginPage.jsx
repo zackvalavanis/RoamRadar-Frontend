@@ -56,21 +56,44 @@ export function LoginPage () {
   };
 
   return ( 
-    <div id='login'>
-      <h1>Login</h1>
+    <div className='loginpage' id='login'>
+      <h1 className='header-login'><b>Login</b></h1>
       <ul>
         {errors.map((error) => (
           <li key={error}>{error}</li>
         ))}
       </ul>
-      <form onSubmit={handleSubmit}>
-        <div>
-          Email: <input name="email" type="email" />
+      <form className='form-login' onSubmit={handleSubmit}>
+        <div className="mb-4"> 
+          <label htmlFor="email" className="block text-sm font-medium text-gray-700">Email:</label>
+          <input
+            id="email"
+            name="email"
+            type="email"
+            className="w-[400px] mt-1 p-2 border border-gray-300 rounded "
+            placeholder="Enter your email"
+          />
         </div>
-        <div>
-          Password: <input name="password" type="password" />
+        
+        <div className="mb-4">
+          <label htmlFor="password" className="block text-sm font-medium text-gray-700">Password:</label>
+          <input
+            id="password"
+            name="password"
+            type="password"
+            className="w-[400px] mt-1 p-2 border border-gray-300 rounded"
+            placeholder="Enter your password"
+          />
         </div>
-        <button type="submit">Login</button>
+
+        <div className='button-login'>
+          <button
+            className="w-[150px] inline-block bg-blue-500 text-white p-2"
+            type="submit"
+          >
+            Login
+          </button>
+        </div>
       </form>
     </div>
   );

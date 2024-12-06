@@ -4,11 +4,13 @@ import { Bars3Icon, XMarkIcon } from '@heroicons/react/24/outline';
 // import { CitiesPage } from './CitiesPage/CitiesPage.jsx'
 // import { LoginPage } from './Login/LoginPage.jsx'
 
+
+//Figure out a way to put logout on here.. 
 const navigation = [
-  { name: 'Home', href: '#', current: true },
-  { name: 'About', href: '#', current: false },
-  { name: 'Services', href: '#', current: false },
-  { name: 'Contact', href: '#', current: false },
+  { name: 'Home', href: '/', current: true },
+  { name: 'Cities', href: '/Cities', current: false },
+  { name: 'Signup', href: '/Signup', current: false },
+  { name: 'Login', href: '/Login', current: false },
 ];
 
 function classNames(...classes) {
@@ -20,15 +22,15 @@ export function Header() {
     <Disclosure as="nav" className="bg-gray-800 shadow-md">
       {({ open }) => (
         <>
-          <div className="max-w-7xl mx-auto px-2 sm:px-6 lg:px-8">
-            <div className="relative flex items-center justify-between h-16">
-              {/* Logo */}
-              <div className="absolute inset-y-0 left-0 flex items-center">
-                <Disclosure.Button className="inline-flex items-center justify-center p-2 text-gray-400 hover:text-white hover:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-white focus:ring-offset-2 focus:ring-offset-gray-800">
-                  <span className="sr-only">Open main menu</span>
-                  <Bars3Icon className="block h-6 w-6" aria-hidden="true" />
-                </Disclosure.Button>
-              </div>
+                <div className="max-w-7xl mx-auto px-2 sm:px-6 lg:px-8">
+                <div className="relative flex items-center justify-between h-16">
+                  {/* Logo */}
+                  <div className="absolute inset-y-0 left-0 flex items-center">
+                    <Disclosure.Button className="inline-flex items-left justify-center p-2 text-gray-400 hover:text-white hover:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-white focus:ring-offset-2 focus:ring-offset-gray-800">
+                      <span className="sr-only">Open main menu</span>
+                      <Bars3Icon className="block h-6 w-6" aria-hidden="true" />
+                    </Disclosure.Button>
+                  </div>
 
                 {/* Desktop navigation */}
                 <div className="hidden sm:block">
@@ -57,9 +59,6 @@ export function Header() {
                       <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 17h5l-1.403-1.403A2.992 2.992 0 0018 12V8a6 6 0 10-12 0v4a2.992 2.992 0 00-1.597 3.597L4 17h5m6 0v-1a3 3 0 10-6 0v1" />
                     </svg>
                   </button>
-                  <div className="relative">
-                    <img className="h-8 w-8 rounded-full" src="https://randomuser.me/api/portraits/men/11.jpg" alt="Profile" />
-                  </div>
                 </div>
               </div>
             </div>
