@@ -8,22 +8,32 @@ export const AuthProvider = ({ children }) => {
   // Load auth state from localStorage when the component first mounts
   useEffect(() => {
     const jwt = localStorage.getItem('jwt');
-    if (jwt) {
-      const user = JSON.parse(localStorage.getItem('user')); // Get the user info from localStorage
-      setAuth(user);
+    const user = localStorage.getItem('user');
+
+    // Check if user and jwt exist in localStorage before parsing
+    if (jwt && user) {
+      try {
+        const parsedUser = JSON.parse(user);
+        setAuth({
+          ...parsedUser, // Spread the user object including is_admin
+          jwt, // Ensure jwt is included as well
+        });
+      } catch (error) {
+        console.error("Error parsing user data from localStorage:", error);
+      }
     }
   }, []);
 
   const login = (user) => {
-    setAuth(user);
-    localStorage.setItem('jwt', user.jwt); // Store JWT in localStorage
-    localStorage.setItem('user', JSON.stringify(user)); // Store user info in localStorage
+    setAuth(user); // Set auth state with the full user object
+    localStorage.setItem('jwt', user.jwt); // Store JWT
+    localStorage.setItem('user', JSON.stringify(user)); // Store user object including is_admin
   };
 
   const logout = () => {
-    setAuth({ user_id: null, id: null });
-    localStorage.removeItem('jwt'); // Remove JWT from localStorage
-    localStorage.removeItem('user'); // Remove user info from localStorage
+    setAuth(null);
+    localStorage.removeItem('jwt');
+    localStorage.removeItem('user');
   };
 
   return (

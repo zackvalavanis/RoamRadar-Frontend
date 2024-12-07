@@ -24,13 +24,14 @@ export function LoginPage () {
       .post(`${apiUrl}/sessions.json`, params)
       .then((response) => { 
         console.log("Response data:", response.data); // Check the full response
-        const { jwt, user_id, email } = response.data; // Use user_id instead of id
+        const { jwt, user_id, is_admin, email } = response.data; // Use user_id instead of id
 
         if (user_id) { // Check if user_id is valid
           // Store the user information, including user_id, in localStorage
           const userData = {
             email: email,
             user_id: user_id, 
+            is_admin: is_admin,
             jwt: jwt
           };
 
@@ -42,7 +43,7 @@ export function LoginPage () {
           console.error("No user ID in the response.");
         }
 
-        login({ email, user_id, jwt });
+        login({ email, user_id, jwt, is_admin });
 
         console.log('You are logged in');
         event.target.reset();
