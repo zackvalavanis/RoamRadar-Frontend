@@ -100,12 +100,12 @@ export function CityShow() {
           ))}
         </ul>
       ) : (
-        <p className="text-center">No comments yet. Be the first to comment!</p>
+        <p className="text-center">No comments yet.</p>
       )}
 
       {/* Comment Form */}
       {!auth || !auth.user_id ? (
-        <p>Please log in to comment</p>
+        <p className="text-center">Please log in to comment</p>
       ) : (
         <form className="cities-form space-y-4" onSubmit={(e) => handleComment(e, city.id)}>
           <div className="comments-input text-center">
