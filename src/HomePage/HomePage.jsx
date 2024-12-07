@@ -1,12 +1,11 @@
 import './HomePage.css'
 
-export function HomePage () {
+export function HomePage () { 
   return ( 
-    <div className='homepage'>
-      <h1 className='h-title'>
+    <div>
+      <h1>
         Hello
       </h1>
     </div>
-  ) 
-
+  )
 }
