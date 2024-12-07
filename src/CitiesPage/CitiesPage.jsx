@@ -11,7 +11,6 @@ export function CitiesPage() {
   const navigate = useNavigate();
   const apiUrl = import.meta.env.VITE_API_BASE_URL;
   const { auth } = useAuth();
-  console.log(auth)
 
 
   const handleIndex = async () => {
@@ -36,6 +35,11 @@ export function CitiesPage() {
     if (!cityName) {
       console.error('City name cannot be empty');
       return; 
+    }
+    const cityExists = cities.some((city) => city.name.toLowerCase() === cityName.toLowerCase());
+    if (cityExists) {
+      console.warn('City already exists');
+      return; // Exit if the city already exists
     }
 
     const params = { city_name: cityName, user_id: auth?.user_id };
