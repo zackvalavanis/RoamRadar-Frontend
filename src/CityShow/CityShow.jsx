@@ -69,7 +69,7 @@ async function initMap() {
 
   // The map, centered at Uluru
   map = new Map(document.getElementById("map"), {
-    zoom: 4,
+    zoom: 10,
     center: position,
     mapId: "DEMO_MAP_ID",
   });
@@ -94,7 +94,7 @@ initMap();
       <div
         id="map"
         ref={mapRef} 
-        style={{ height: "400px", width: "100%" }}
+        style={{ height: "400px", width: "50%" }}
       ></div>
 
       {/* Display Comments */}
