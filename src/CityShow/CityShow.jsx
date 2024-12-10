@@ -60,7 +60,8 @@ let map;
 
 async function initMap() {
   // The location of Uluru
-  const position = { lat: -25.344, lng: 131.031 };
+  const position = { lat: city.geometry.location.lat, lng: city.geometry.location.lng };
+  console.log(position)
   // Request needed libraries.
   //@ts-ignore
   const { Map } = await google.maps.importLibrary("maps");
@@ -92,7 +93,7 @@ initMap();
       {/* Google Map Container */}
       <div
         id="map"
-        ref={mapRef} // Attach the map container to the ref
+        ref={mapRef} 
         style={{ height: "400px", width: "100%" }}
       ></div>
 
