@@ -1,5 +1,5 @@
 import { useLoaderData } from "react-router-dom";
-import { useEffect, useState } from "react";
+import { useEffect, useState, useRef } from "react";
 import { useAuth } from '../AuthenticationProvider/AuthProvider';
 import axios from 'axios';
 
@@ -9,6 +9,10 @@ export function CityShow() {
   const [comments, setComments] = useState({}); // Manage comment input by city
   const [cityComments, setCityComments] = useState(city.comments || []); // Manage the city's comments state
   const apiUrl = import.meta.env.VITE_API_BASE_URL;
+
+  console.log(city);
+
+  const mapRef = useRef(null);
 
   const handleComment = async (event, cityId) => {
     event.preventDefault();
@@ -44,41 +48,40 @@ export function CityShow() {
     }
   };
 
-  const handleIndex = async () => {
-    try {
-      const response = await axios.get(`${apiUrl}/cities.json`);
-      console.log('API response:', response.data);
-    } catch (error) {
-      console.error('Error fetching cities', error);
-    }
-  };
-
-  useEffect(() => {
-    if (window.google && city.location) {
-      const { lat, lng } = city.location;
-
-      const mapOptions = {
-        center: { lat, lng },
-        zoom: 12,
-      };
-
-      const mapElement = document.getElementById("map");
-      const map = new window.google.maps.Map(mapElement, mapOptions);
-
-      new window.google.maps.Marker({
-        position: { lat, lng },
-        map: map,
-        title: city.name,
-      });
-    }
-  }, [city]);
-
   const handleContentChange = (cityId, value) => {
     setComments((prevComments) => ({
       ...prevComments,
       [cityId]: value, // Update comment for the specific city
     }));
   };
+
+  // Initialize and add the map
+let map;
+
+async function initMap() {
+  // The location of Uluru
+  const position = { lat: -25.344, lng: 131.031 };
+  // Request needed libraries.
+  //@ts-ignore
+  const { Map } = await google.maps.importLibrary("maps");
+  const { AdvancedMarkerElement } = await google.maps.importLibrary("marker");
+
+  // The map, centered at Uluru
+  map = new Map(document.getElementById("map"), {
+    zoom: 4,
+    center: position,
+    mapId: "DEMO_MAP_ID",
+  });
+
+  // The marker, positioned at Uluru
+  const marker = new AdvancedMarkerElement({
+    map: map,
+    position: position,
+    title: "Uluru",
+  });
+}
+
+initMap();
 
   return (
     <div>
@@ -89,6 +92,7 @@ export function CityShow() {
       {/* Google Map Container */}
       <div
         id="map"
+        ref={mapRef} // Attach the map container to the ref
         style={{ height: "400px", width: "100%" }}
       ></div>
 
