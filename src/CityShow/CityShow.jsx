@@ -11,7 +11,10 @@ export function CityShow() {
   const [places, setPlaces] = useState([]);
   const apiUrl = import.meta.env.VITE_API_BASE_URL;
   const position = { lat: city.geometry.location.lat, lng: city.geometry.location.lng };
-
+  const [currentPage, setCurrentPage] = useState(1);
+  const [currentPlaceReviews, setCurrentPlaceReviews] = useState([]);
+  const [selectedPlace, setSelectedPlace] = useState(null);
+  const pageSize = 3;
   const mapRef = useRef(null);
   const [map, setMap] = useState(null);
 
@@ -141,37 +144,72 @@ export function CityShow() {
     }
   }, [city]);
 
+  const paginate = (array, page, pageSize) => {
+    const start = (page - 1) * pageSize;
+    const end = start + pageSize;
+    return array.slice(start, end);
+  };
+
+  const handlePlaceSelection = (place) => {
+    setSelectedPlace(place);
+    setCurrentPage(1); // Reset to the first page of reviews
+    setCurrentPlaceReviews(paginate(place.reviews || [], 1, pageSize));
+  };
+
+  const handlePageChange = (direction) => {
+    const newPage = currentPage + direction;
+    const totalReviews = selectedPlace?.reviews?.length || 0;
+    if (newPage > 0 && newPage <= Math.ceil(totalReviews / pageSize)) {
+      setCurrentPage(newPage);
+      setCurrentPlaceReviews(paginate(selectedPlace.reviews, newPage, pageSize));
+    }
+  };
+
   return (
     <div>
-      <h1>{city.name}</h1>
-      <h2>{city.location.city}, {city.location.state}</h2>
+      <h2>
+        {city.location}
+      </h2>
       <img src={city.photo_url} alt={city.name} />
-      
+
       {/* Google Map Container */}
-      <div
-        id="map"
-        ref={mapRef} 
-        style={{ height: "400px", width: "50%" }}
-      ></div>
+      <div id="map" ref={mapRef} style={{ height: "400px", width: "50%" }}></div>
 
       {/* Places List */}
       <div>
         <h3>Nearby Restaurants</h3>
         {places.map((place) => (
-          <div key={place.displayName}>
+          <div key={place.displayName} onClick={() => handlePlaceSelection(place)}>
             <b>{place.displayName}</b>
-            {place.reviews && place.reviews.map((review) => (
-              <div key={review.id}>
-              <li>
-                {review.text}
-
-
-              </li>
-              </div>
-            ))}
           </div>
         ))}
       </div>
+
+      {/* Reviews Section */}
+      {selectedPlace && (
+        <div>
+          <h4>Reviews for {selectedPlace.displayName}</h4>
+          <ul>
+            {currentPlaceReviews.map((review) => (
+              <li key={review.id}>{review.text}</li>
+            ))}
+          </ul>
+          <div>
+            <button onClick={() => handlePageChange(-1)} disabled={currentPage === 1}>
+              Previous
+            </button>
+            <span>
+              Page {currentPage} of {Math.ceil((selectedPlace.reviews?.length || 0) / pageSize)}
+            </span>
+            <button
+              onClick={() => handlePageChange(1)}
+              disabled={currentPage === Math.ceil((selectedPlace.reviews?.length || 0) / pageSize)}
+            >
+              Next
+            </button>
+          </div>
+        </div>
+      )}
 
       {/* Display Comments */}
       {cityComments.length > 0 ? (
@@ -195,18 +233,15 @@ export function CityShow() {
               placeholder="Type your comment..."
               name="content"
               type="text"
-              value={comments[city.id] || ''}
+              value={comments[city.id] || ""}
               onChange={(e) => handleContentChange(city.id, e.target.value)}
               required
             />
           </div>
-          <div>
-            <input defaultValue={auth.user_id} name="user_id" type="hidden" />
-          </div>
-          <div>
-            <input defaultValue={city.id} name="city_id" type="hidden" />
-          </div>
-          <button className="w-[150px] inline-block bg-blue-500 text-white p-2 rounded mx-auto" type="submit">
+          <button
+            className="w-[150px] inline-block bg-blue-500 text-white p-2 rounded mx-auto"
+            type="submit"
+          >
             Comment
           </button>
         </form>
