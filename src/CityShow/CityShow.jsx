@@ -94,10 +94,10 @@ export function CityShow() {
               },
               isOpenNow: true,
               language: "en-US",
-              maxResultCount: 8,
-              minRating: 3.2,
+              maxResultCount: 20,
+              minRating: 4.0,
               region: "us",
-              useStrictTypeFiltering: false,
+              useStrictTypeFiltering: true,
             };
 
             const { places: foundPlaces } = await Place.searchByText(request);
@@ -108,7 +108,6 @@ export function CityShow() {
               const { LatLngBounds } = await google.maps.importLibrary("core");
               const bounds = new LatLngBounds();
 
-              // Add markers for each place
               foundPlaces.forEach((place) => {
                 new AdvancedMarkerElement({
                   map: newMap,
