@@ -86,7 +86,7 @@ export function CityShow() {
 
             const request = {
               textQuery: `Restaurants in ${city.name}`,
-              fields: ["displayName", "location", "businessStatus"],
+              fields: ["displayName", "location", "businessStatus", "rating", "reviews", "servesBeer", ],
               includedType: "restaurant",
               locationBias: { 
                 lat: city.geometry.location.lat, 
@@ -113,7 +113,9 @@ export function CityShow() {
                   map: newMap,
                   position: place.location,
                   title: place.displayName,
+                  // rating: place.rating
                 });
+                console.log(place)
 
                 bounds.extend(place.location);
               });
@@ -157,7 +159,16 @@ export function CityShow() {
         <h3>Nearby Restaurants</h3>
         {places.map((place) => (
           <div key={place.displayName}>
-            {place.displayName}
+            <b>{place.displayName}</b>
+            {place.reviews && place.reviews.map((review) => (
+              <div key={review.id}>
+              <li>
+                {review.text}
+
+
+              </li>
+              </div>
+            ))}
           </div>
         ))}
       </div>
