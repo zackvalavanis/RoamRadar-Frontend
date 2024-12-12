@@ -111,7 +111,11 @@ export function CitiesPage() {
             <div key={city.id} className="mb-6 border p-4 rounded shadow">
               <h2 className="text-center text-xl">{city.name}</h2>
               <h3 className="text-center">{city.location}</h3>
-              <img className='image-center' src={city.photo_url} alt={city.name}></img>
+              <img
+                className='image-center' 
+                src={city.photo_url} 
+                alt={city.name}
+              />
               <button
                 className="w-[150px] container flex flex-col items-center bg-blue-500 text-white p-2 rounded mx-auto"
                 onClick={() => handleNavigate(city.id)}
