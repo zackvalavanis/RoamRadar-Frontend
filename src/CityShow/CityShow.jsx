@@ -6,42 +6,39 @@ import axios from 'axios';
 export function CityShow() {
   const { auth } = useAuth();
   const city = useLoaderData();
-  const [comments, setComments] = useState({}); // Manage comment input by city
-  const [cityComments, setCityComments] = useState(city.comments || []); // Manage the city's comments state
+  const [comments, setComments] = useState({}); 
+  const [cityComments, setCityComments] = useState(city.comments || []); 
+  const [places, setPlaces] = useState([]);
   const apiUrl = import.meta.env.VITE_API_BASE_URL;
-
-  console.log(city);
+  const position = { lat: city.geometry.location.lat, lng: city.geometry.location.lng };
 
   const mapRef = useRef(null);
+  const [map, setMap] = useState(null);
 
   const handleComment = async (event, cityId) => {
     event.preventDefault();
 
-    // Check if user is logged in before trying to post a comment
     if (!auth || !auth.user_id) {
       console.log('You must be logged in to post a comment');
       return;
     }
 
-    const content = comments[cityId]; // Use content specific to the city
-    const userId = auth.user_id; // User ID will be null if logged out
+    const content = comments[cityId];
+    const userId = auth.user_id;
     const params = { content, user_id: userId, city_id: cityId };
 
     try {
-      // Post the new comment to the API
       const response = await axios.post(`${apiUrl}/comments.json`, params);
       console.log('Comment posted:', response.data);
 
-      // Update the comments list for the city (assuming the response returns the newly posted comment)
       setCityComments((prevComments) => [
         ...prevComments,
-        response.data, // Append the new comment
+        response.data,
       ]);
 
-      // Clear the comment input for that specific city
       setComments((prevComments) => ({
         ...prevComments,
-        [cityId]: '', // Reset comment input for that city
+        [cityId]: '',
       }));
     } catch (error) {
       console.error('Error posting comment', error);
@@ -51,44 +48,103 @@ export function CityShow() {
   const handleContentChange = (cityId, value) => {
     setComments((prevComments) => ({
       ...prevComments,
-      [cityId]: value, // Update comment for the specific city
+      [cityId]: value,
     }));
   };
 
-  // Initialize and add the map
-let map;
+  useEffect(() => {
+    // Function to initialize the map
+    async function initMap() {
+      try {
+        const { Map } = await google.maps.importLibrary("maps");
+        const { AdvancedMarkerElement } = await google.maps.importLibrary("marker");
 
-async function initMap() {
-  // The location of Uluru
-  const position = { lat: city.geometry.location.lat, lng: city.geometry.location.lng };
-  console.log(position)
-  // Request needed libraries.
-  //@ts-ignore
-  const { Map } = await google.maps.importLibrary("maps");
-  const { AdvancedMarkerElement } = await google.maps.importLibrary("marker");
+        // Create the map
+        const newMap = new Map(mapRef.current, {
+          zoom: 13,
+          center: position,
+          mapId: "DEMO_MAP_ID",
+        });
+        setMap(newMap);
 
-  // The map, centered at Uluru
-  map = new Map(document.getElementById("map"), {
-    zoom: 10,
-    center: position,
-    mapId: "DEMO_MAP_ID",
-  });
+        // Add a marker for the city
+        const cityMarkerImg = document.createElement("img");
+        cityMarkerImg.src = "https://developers.google.com/maps/documentation/javascript/examples/full/images/beachflag.png";
 
-  // The marker, positioned at Uluru
-  const marker = new AdvancedMarkerElement({
-    map: map,
-    position: position,
-    title: "Uluru",
-  });
-}
+        new AdvancedMarkerElement({
+          map: newMap,
+          position: position,
+          content: cityMarkerImg,
+          title: city.name,
+        });
 
-initMap();
+        // Find nearby places
+        async function findPlaces() {
+          try {
+            const { Place } = await google.maps.importLibrary("places");
+            const { AdvancedMarkerElement } = await google.maps.importLibrary("marker");
+
+            const request = {
+              textQuery: `Restaurants in ${city.name}`,
+              fields: ["displayName", "location", "businessStatus"],
+              includedType: "restaurant",
+              locationBias: { 
+                lat: city.geometry.location.lat, 
+                lng: city.geometry.location.lng 
+              },
+              isOpenNow: true,
+              language: "en-US",
+              maxResultCount: 8,
+              minRating: 3.2,
+              region: "us",
+              useStrictTypeFiltering: false,
+            };
+
+            const { places: foundPlaces } = await Place.searchByText(request);
+
+            if (foundPlaces.length) {
+              setPlaces(foundPlaces);
+
+              const { LatLngBounds } = await google.maps.importLibrary("core");
+              const bounds = new LatLngBounds();
+
+              // Add markers for each place
+              foundPlaces.forEach((place) => {
+                new AdvancedMarkerElement({
+                  map: newMap,
+                  position: place.location,
+                  title: place.displayName,
+                });
+
+                bounds.extend(place.location);
+              });
+
+              newMap.fitBounds(bounds);
+            } else {
+              console.log("No places found");
+            }
+          } catch (error) {
+            console.error("Error finding places:", error);
+          }
+        }
+
+        findPlaces();
+      } catch (error) {
+        console.error("Error initializing map:", error);
+      }
+    }
+
+    // Only run if the map libraries are available
+    if (window.google?.maps) {
+      initMap();
+    }
+  }, [city]);
 
   return (
     <div>
       <h1>{city.name}</h1>
       <h2>{city.location.city}, {city.location.state}</h2>
-      <img src={city.photo_url} alt={city.name}></img>
+      <img src={city.photo_url} alt={city.name} />
       
       {/* Google Map Container */}
       <div
@@ -96,6 +152,16 @@ initMap();
         ref={mapRef} 
         style={{ height: "400px", width: "50%" }}
       ></div>
+
+      {/* Places List */}
+      <div>
+        <h3>Nearby Restaurants</h3>
+        {places.map((place) => (
+          <div key={place.displayName}>
+            {place.displayName}
+          </div>
+        ))}
+      </div>
 
       {/* Display Comments */}
       {cityComments.length > 0 ? (
