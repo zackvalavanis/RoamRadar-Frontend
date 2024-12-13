@@ -9,7 +9,7 @@ import { CityShow } from './CityShow/CityShow.jsx'
 import { SignupPage } from './Signup/SignupPage.jsx'
 import { AuthProvider } from './AuthenticationProvider/AuthProvider.jsx'
 import { createBrowserRouter, RouterProvider, Outlet} from 'react-router-dom'
-
+import { CitiesProvider } from './CitiesPage/CitiesContext.jsx'
 
 function App() {
   const apiUrl = import.meta.env.VITE_API_BASE_URL
@@ -55,7 +55,9 @@ function App() {
 
   return (
     <AuthProvider>
+      <CitiesProvider>
       <RouterProvider router={router}/>
+      </CitiesProvider>
     </AuthProvider>
   )
 }

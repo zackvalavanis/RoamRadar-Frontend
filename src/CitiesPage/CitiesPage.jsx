@@ -3,6 +3,8 @@ import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import './CitiesPage.css';
 import { useAuth } from '../AuthenticationProvider/AuthProvider';
+// import { useCities } from './CitiesContext';
+
 
 export function CitiesPage() {
   const [cities, setCities] = useState([]);
