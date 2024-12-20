@@ -17,6 +17,8 @@ export function CityShow() {
   const pageSize = 3;
   const mapRef = useRef(null);
   const [map, setMap] = useState(null);
+  const apiUrl2 = import.meta.env.VITE_GOOGLE_API_KEY;
+
 
   const handleComment = async (event, cityId) => {
     event.preventDefault();
@@ -89,7 +91,7 @@ export function CityShow() {
 
             const request = {
               textQuery: `Restaurants in ${city.name}`,
-              fields: ["displayName", "location", "businessStatus", "rating", "reviews", "servesBeer", ],
+              fields: ["displayName", "location", "businessStatus", "rating", "reviews", "servesBeer", "hasLiveMusic", "photos", 'types'],
               includedType: "restaurant",
               locationBias: { 
                 lat: city.geometry.location.lat, 
@@ -177,13 +179,54 @@ export function CityShow() {
 
       {/* Places List */}
       <div>
-        <h3>Nearby Restaurants</h3>
-        {places.map((place) => (
-          <div key={place.displayName} onClick={() => handlePlaceSelection(place)}>
-            <b>{place.displayName}</b>
-          </div>
-        ))}
-      </div>
+      <h3>Nearby Restaurants</h3>
+{places.map((place) => (
+  <div key={place.displayName} onClick={() => handlePlaceSelection(place)}>
+    <b><b>{place.rating} Stars: </b>{place.displayName}</b>
+
+    {place.photos && place.photos.map((photo, index) => {
+      // Ensure the photo name exists and is formatted correctly
+      const photoName = photo.name;
+      console.log('Photo name:', photoName); // Log to see the format
+
+      if (!photoName || !photoName.includes("/photos/")) {
+        console.error("Invalid photo name for place:", place.displayName);
+        return null;  // Skip rendering if photo name is invalid
+      }
+
+      // Extract the photo reference (after "/photos/")
+      const photoReference = photoName.split("/photos/")[1];
+      console.log('Photo reference:', photoReference); // Log the extracted reference
+
+      if (!photoReference) {
+        console.error("Missing photo reference for place:", place.displayName);
+        return null; // Skip rendering if photo reference is missing
+      }
+
+      // Construct the API URL with the correct reference
+      const imageURL = `https://maps.googleapis.com/maps/api/place/photo?maxwidth=400&photo_reference=${photoReference}&key=${apiUrl2}`;
+
+      console.log('Image URL:', imageURL); // Log to check the URL
+
+      return (
+        <div key={index}>
+          <img 
+            src={imageURL} 
+            alt={place.displayName} 
+            width="40%" 
+            height="auto" 
+          />
+        </div>
+      );
+    })}
+  </div>
+))}
+</div>
+
+
+
+
+
 
       {/* Reviews Section */}
       {selectedPlace && (

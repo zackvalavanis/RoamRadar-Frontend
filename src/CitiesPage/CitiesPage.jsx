@@ -115,7 +115,7 @@ export function CitiesPage() {
               <h3 className="text-center">{city.location}</h3>
               <img
                 className='image-center' 
-                src={city.photo_url} 
+                src={city.photo_url}
                 alt={city.name}
               />
               <button
