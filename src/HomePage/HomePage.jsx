@@ -45,7 +45,20 @@ export function HomePage() {
 
   return (
     <div>
-      {cities && cities.length > 0 ? (
+      <section className='homepage'>
+        <div className='fly-in-text'>
+          <h1>City of the Year: Tokyo</h1>
+        </div>
+
+      </section>
+      <section className='section-2'>
+
+      </section>
+
+      <section className='section-3'>
+
+      </section>
+      {/* {cities && cities.length > 0 ? (
         cities.map((city) => (
           <div key={city.id}>
             <h1>{city.name}</h1>
@@ -53,7 +66,7 @@ export function HomePage() {
         ))
       ) : (
         <p>No cities available.</p>  // Display a message if no cities are available
-      )}
+      )} */}
     </div>
   );
 }

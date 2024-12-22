@@ -6,8 +6,8 @@ import axios from 'axios';
 export function CityShow() {
   const { auth } = useAuth();
   const city = useLoaderData();
-  const [comments, setComments] = useState({}); 
-  const [cityComments, setCityComments] = useState(city.comments || []); 
+  const [comments, setComments] = useState({});
+  const [cityComments, setCityComments] = useState(city.comments || []);
   const [places, setPlaces] = useState([]);
   const apiUrl = import.meta.env.VITE_API_BASE_URL;
   const position = { lat: city.geometry.location.lat, lng: city.geometry.location.lng };
@@ -18,7 +18,6 @@ export function CityShow() {
   const mapRef = useRef(null);
   const [map, setMap] = useState(null);
   const apiUrl2 = import.meta.env.VITE_GOOGLE_API_KEY;
-
 
   const handleComment = async (event, cityId) => {
     event.preventDefault();
@@ -36,11 +35,13 @@ export function CityShow() {
       const response = await axios.post(`${apiUrl}/comments.json`, params);
       console.log('Comment posted:', response.data);
 
+      // Update the city comments state with the new comment
       setCityComments((prevComments) => [
         ...prevComments,
         response.data,
       ]);
 
+      // Reset the comment input field
       setComments((prevComments) => ({
         ...prevComments,
         [cityId]: '',
@@ -108,8 +109,8 @@ export function CityShow() {
             const { places: foundPlaces } = await Place.searchByText(request);
 
             if (foundPlaces.length) {
-              setPlaces(foundPlaces);
-
+              const sortedPlaces = foundPlaces.sort((a, b) => b.rating - a.rating);
+              setPlaces(sortedPlaces);
               const { LatLngBounds } = await google.maps.importLibrary("core");
               const bounds = new LatLngBounds();
 
@@ -118,9 +119,7 @@ export function CityShow() {
                   map: newMap,
                   position: place.location,
                   title: place.displayName,
-                  // rating: place.rating
                 });
-                console.log(place)
 
                 bounds.extend(place.location);
               });
@@ -169,101 +168,95 @@ export function CityShow() {
 
   return (
     <div>
-      <h2>
-        {city.location}
-      </h2>
-      <img src={city.photo_url} alt={city.name} />
-
+      <div style={{ borderRadius: "10px", display: 'flex', justifyContent: "center", fontSize: "40px", padding: "10px" }}>
+        <h2><b>{city.location}</b></h2>
+      </div>      
+     
       {/* Google Map Container */}
-      <div id="map" ref={mapRef} style={{ height: "400px", width: "50%" }}></div>
-
-      {/* Places List */}
-      <div>
-      <h3>Nearby Restaurants</h3>
-{places.map((place) => (
-  <div key={place.displayName} onClick={() => handlePlaceSelection(place)}>
-    <b><b>{place.rating} Stars: </b>{place.displayName}</b>
-
-    {place.photos && place.photos.map((photo, index) => {
-      // Ensure the photo name exists and is formatted correctly
-      const photoName = photo.name;
-      console.log('Photo name:', photoName); // Log to see the format
-
-      if (!photoName || !photoName.includes("/photos/")) {
-        console.error("Invalid photo name for place:", place.displayName);
-        return null;  // Skip rendering if photo name is invalid
-      }
-
-      // Extract the photo reference (after "/photos/")
-      const photoReference = photoName.split("/photos/")[1];
-      console.log('Photo reference:', photoReference); // Log the extracted reference
-
-      if (!photoReference) {
-        console.error("Missing photo reference for place:", place.displayName);
-        return null; // Skip rendering if photo reference is missing
-      }
-
-      // Construct the API URL with the correct reference
-      const imageURL = `https://maps.googleapis.com/maps/api/place/photo?maxwidth=400&photo_reference=${photoReference}&key=${apiUrl2}`;
-
-      console.log('Image URL:', imageURL); // Log to check the URL
-
-      return (
-        <div key={index}>
-          <img 
-            src={imageURL} 
-            alt={place.displayName} 
-            width="40%" 
-            height="auto" 
-          />
-        </div>
-      );
-    })}
+      {/* <div style={{ textAlign: "center", padding: "5px"}}>
+        <h1><b>Map of {city.name}</b></h1>
+      </div> */}
+      <div
+    style={{
+      display: "flex",
+      justifyContent: "center",
+      alignItems: "center",
+      height: "450px", // Full height for the map section
+    }}
+  >
+    <div
+      id="map"
+      ref={mapRef}
+      style={{
+        height: "425px",
+        width: "50%",
+        borderRadius: "10px",
+        backgroundColor: "#f0f0f0", // Visible background during testing
+      }}
+    />
   </div>
-))}
-</div>
+      <div>
+        <div style={{ textAlign: "center", padding: "20px"}}>
+        <h3><b>Restaurants</b></h3>
+        </div>
+        {places.map((place) => (
+          <div key={place.displayName} onClick={() => handlePlaceSelection(place)}>
+            <div style={{textAlign: "center"}}>
+            <b>
+              <b>{place.rating} Stars: </b>{place.displayName}
+            </b>
+            </div>
 
+            {/* Photos of the place */}
+            <div style={{ overflowX: "auto", whiteSpace: "nowrap", display: "flex", gap: "10px" }}>
+              {place.photos &&
+                place.photos.map((photo, index) => {
+                  const photoName = photo.name;
+                  if (!photoName || !photoName.includes("/photos/")) {
+                    console.error("Invalid photo name for place:", place.displayName);
+                    return null;
+                  }
 
+                  const photoReference = photoName.split("/photos/")[1];
+                  if (!photoReference) {
+                    console.error("Missing photo reference for place:", place.displayName);
+                    return null;
+                  }
 
+                  const imageURL = `https://maps.googleapis.com/maps/api/place/photo?maxwidth=400&photo_reference=${photoReference}&key=${apiUrl2}`;
 
+                  return (
+                    <div key={index} style={{ display: "inline-block", minWidth: "300px" }}>
+                      <img
+                        src={imageURL}
+                        alt={place.displayName}
+                        width="100%"
+                        height="auto"
+                        style={{ borderRadius: "10px" }}
+                      />
+                    </div>
+                  );
+                })}
+            </div>
+          </div>
+        ))}
+      </div>
 
-
-      {/* Reviews Section */}
-      {selectedPlace && (
-        <div>
-          <h4>Reviews for {selectedPlace.displayName}</h4>
+      {/* Comments Section */}
+      <div>
+        <h3>Comments</h3>
+        {cityComments.length > 0 ? (
           <ul>
-            {currentPlaceReviews.map((review) => (
-              <li key={review.id}>{review.text}</li>
+            {cityComments.map((comment) => (
+              <li key={comment.id}>
+                {comment.content} - {comment.user_name}
+              </li>
             ))}
           </ul>
-          <div>
-            <button onClick={() => handlePageChange(-1)} disabled={currentPage === 1}>
-              Previous
-            </button>
-            <span>
-              Page {currentPage} of {Math.ceil((selectedPlace.reviews?.length || 0) / pageSize)}
-            </span>
-            <button
-              onClick={() => handlePageChange(1)}
-              disabled={currentPage === Math.ceil((selectedPlace.reviews?.length || 0) / pageSize)}
-            >
-              Next
-            </button>
-          </div>
-        </div>
-      )}
-
-      {/* Display Comments */}
-      {cityComments.length > 0 ? (
-        <ul className="text-center">
-          {cityComments.map((comment) => (
-            <li key={comment.id}>{comment.content}</li>
-          ))}
-        </ul>
-      ) : (
-        <p className="text-center">No comments yet.</p>
-      )}
+        ) : (
+          <p>No comments yet.</p>
+        )}
+      </div>
 
       {/* Comment Form */}
       {!auth || !auth.user_id ? (
@@ -285,7 +278,7 @@ export function CityShow() {
             className="w-[150px] inline-block bg-blue-500 text-white p-2 rounded mx-auto"
             type="submit"
           >
-            Comment
+            Post Comment
           </button>
         </form>
       )}

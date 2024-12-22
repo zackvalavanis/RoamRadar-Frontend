@@ -73,28 +73,37 @@ export function CitiesPage() {
   };
 
   return (
+    <div className='citiesPage'>
     <div className="min-h-screen flex flex-col justify-center items-center">
       <div className="w-full max-w-md p-4">
         {!auth || !auth.user_id ? (
           <p></p>
         ) : (
-          <form onSubmit={handleCreate} className="space-y-4 text-center">
-            <label htmlFor="city_name" className="block">Enter A City:</label>
+        <form onSubmit={handleCreate} className="space-y-4 text-center">
+          <label htmlFor="city_name" className="block"></label>
+          <div style={{ display: 'flex', justifyContent: "flex-end" }}>
             <input
               name="city_name"
               type="text"
               value={cityName}
+              placeholder="Enter a City..."
               onChange={(e) => setCityName(e.target.value)}
               required
               className="w-full p-2 border border-gray-300 rounded"
             />
-            <input name="user_id" defaultValue={auth.user_id || ''} type="hidden" />
-            <button type="submit" className="w-[150px] inline-block bg-blue-500 text-white p-2 rounded mx-auto">Create new</button>
-          </form>
+          <input name="user_id" defaultValue={auth.user_id || ''} type="hidden" />
+        </div>
+        <button
+          type="submit"
+          className="w-[150px] inline-block bg-blue-500 text-white p-2 rounded mx-auto"
+        >
+          Create new
+        </button>
+      </form>
         )}
       </div>
 
-      <h1 className="text-center my-8">Cities:</h1>
+      <h1 className="text-center my-5">Cities:</h1>
 
       {/* Search Input */}
       <div className="w-full max-w-md p-4">
@@ -138,6 +147,7 @@ export function CitiesPage() {
           <p className="text-center">No cities found.</p>
         )}
       </div>
+    </div>
     </div>
   );
 }

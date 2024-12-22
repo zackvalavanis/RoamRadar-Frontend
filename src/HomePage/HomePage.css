@@ -1,0 +1,51 @@
+/* HomePage.css */
+.section-2{
+  height: 100vh; /* Full viewport height */
+  background-image: url('https://wanderlustcrew.com/wp-content/uploads/2023/03/Most-Beautiful-Places-in-Japan-Kinkakuji-Temple.jpeg'); 
+  background-size: cover; 
+  background-position: center; 
+  background-repeat: no-repeat; 
+  display: flex; 
+}
+
+.section-3{ 
+  height: 100vh; /* Full viewport height */
+  background-image: url('https://media.cntraveler.com/photos/62ab85a86df361f5801fd45b/master/pass/Tokyo_GettyImages-1319747119.jpg'); 
+  background-size: cover; 
+  background-position: center; 
+  background-repeat: no-repeat; 
+  display: flex; 
+}
+
+.homepage {
+  height: 100vh; /* Full viewport height */
+  background-image: url('https://images.goway.com/production/hero/japan_tokyo_skyline_iStock-1164705845.jpg'); 
+  background-size: cover; 
+  background-position: center; 
+  background-repeat: no-repeat; 
+  display: flex; 
+  align-items: center; /* Center content vertically */
+  justify-content: flex-start; /* Align content to the left */
+  color: lavender;
+  padding: 10px;
+}
+
+.fly-in-text {
+  font-size: 2.0rem;
+  font-weight: bold;
+  opacity: 0;
+  transform: translateX(-100%) translateY(-20%); /* Start off-screen and move up */
+  animation: flyIn 2.5s ease-out forwards; /* Trigger animation */
+  margin-top: -10%; /* Add an explicit top margin */
+}
+
+@keyframes flyIn {
+  0% {
+    opacity: 0;
+    transform: translateX(-100%) translateY(-20%);
+  }
+  100% {
+    opacity: 1;
+    transform: translateX(0) translateY(-20%);
+  }
+}
