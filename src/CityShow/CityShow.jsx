@@ -223,7 +223,7 @@ export function CityShow() {
                     return null;
                   }
 
-                  // const imageURL = `https://maps.googleapis.com/maps/api/place/photo?maxwidth=400&photo_reference=${photoReference}&key=${apiUrl2}`;
+                  const imageURL = `https://maps.googleapis.com/maps/api/place/photo?maxwidth=400&photo_reference=${photoReference}&key=${apiUrl2}`;
 
                   return (
                     <div key={index} style={{ display: "inline-block", minWidth: "300px" }}>

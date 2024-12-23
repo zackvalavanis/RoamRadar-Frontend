@@ -1,9 +1,11 @@
 import './HomePage.css';
 import { useState, useEffect } from 'react';
 import { useCities } from '../CitiesPage/CitiesContext.jsx';
+import { useNavigate } from 'react-router-dom';
 
 export function HomePage() {
   const { cities, loading, error } = useCities(); // Accessing cities data from context
+  const navigate = useNavigate()
   const [currentLocation, setCurrentLocation] = useState({
     latitude: null,
     longitude: null,
@@ -43,6 +45,10 @@ export function HomePage() {
   if (loading) return <p>Loading cities...</p>; // Show a loading message
   if (error) return <p>Error: {error}</p>; // Show an error message
 
+  const navigateButton = () => { 
+    navigate('/CityShow/58')
+  }
+
   return (
     <div>
       <section className='homepage'>
@@ -50,7 +56,7 @@ export function HomePage() {
           <h1>City of the Year: Tokyo</h1>
         </div>
         <div className='fly-in-text2'>
-          <button>Learn More</button>
+          <button onClick={navigateButton}>Learn More</button>
         </div>
       </section>
       <section className='section-2'>
