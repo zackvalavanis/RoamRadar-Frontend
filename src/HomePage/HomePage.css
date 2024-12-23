@@ -1,42 +1,53 @@
 /* HomePage.css */
-.section-2{
+.section-2, .section-3, .homepage {
+  position: relative; /* Make each section a container for absolutely positioned elements */
   height: 100vh; /* Full viewport height */
-  background-image: url('https://wanderlustcrew.com/wp-content/uploads/2023/03/Most-Beautiful-Places-in-Japan-Kinkakuji-Temple.jpeg'); 
-  background-size: cover; 
-  background-position: center; 
-  background-repeat: no-repeat; 
-  display: flex; 
+  display: flex; /* Use flexbox to control layout */
+  align-items: center; /* Center content vertically */
+  justify-content: flex-start; /* Align content to the left */
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
 }
 
-.section-3{ 
-  height: 100vh; /* Full viewport height */
-  background-image: url('https://media.cntraveler.com/photos/62ab85a86df361f5801fd45b/master/pass/Tokyo_GettyImages-1319747119.jpg'); 
-  background-size: cover; 
-  background-position: center; 
-  background-repeat: no-repeat; 
-  display: flex; 
+.section-2 {
+  background-image: url('https://wanderlustcrew.com/wp-content/uploads/2023/03/Most-Beautiful-Places-in-Japan-Kinkakuji-Temple.jpeg');
+}
+
+.section-3 {
+  background-image: url('https://media.cntraveler.com/photos/62ab85a86df361f5801fd45b/master/pass/Tokyo_GettyImages-1319747119.jpg');
 }
 
 .homepage {
-  height: 100vh; /* Full viewport height */
-  background-image: url('https://images.goway.com/production/hero/japan_tokyo_skyline_iStock-1164705845.jpg'); 
-  background-size: cover; 
-  background-position: center; 
-  background-repeat: no-repeat; 
-  display: flex; 
-  align-items: center; /* Center content vertically */
-  justify-content: flex-start; /* Align content to the left */
+  background-image: url('https://images.goway.com/production/hero/japan_tokyo_skyline_iStock-1164705845.jpg');
   color: lavender;
-  padding: 10px;
 }
 
-.fly-in-text {
-  font-size: 2.0rem;
+.fly-in-text, .fly-in-text2 {
+  position: absolute; /* Position these text elements absolutely */
   font-weight: bold;
   opacity: 0;
   transform: translateX(-100%) translateY(-20%); /* Start off-screen and move up */
   animation: flyIn 2.5s ease-out forwards; /* Trigger animation */
-  margin-top: -10%; /* Add an explicit top margin */
+}
+
+.fly-in-text {
+  font-size: 2.0rem;
+  margin-top: -10%; /* Adjust this value as needed */
+  left: 10px
+}
+
+.fly-in-text2 {
+  font-size: 2.0rem;
+  margin-top: -10%;
+  left: 37%; /* Adjust to push it further to the right */
+  border-radius: 10px;
+  color: lavender !important;
+}
+
+.fly-in-text2:hover {
+  background-color: lavender;
+  color: rgb(26, 26, 137) !important; /* Explicitly set text color on hover */
 }
 
 @keyframes flyIn {

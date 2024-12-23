@@ -49,7 +49,9 @@ export function HomePage() {
         <div className='fly-in-text'>
           <h1>City of the Year: Tokyo</h1>
         </div>
-
+        <div className='fly-in-text2'>
+          <button>Learn More</button>
+        </div>
       </section>
       <section className='section-2'>
 
