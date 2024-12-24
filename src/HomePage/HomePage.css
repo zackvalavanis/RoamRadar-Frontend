@@ -41,13 +41,11 @@
   font-size: 2.0rem;
   margin-top: -10%;
   left: 37%; /* Adjust to push it further to the right */
-  border-radius: 10px;
   color: lavender !important;
 }
 
 .fly-in-text2:hover {
-  background-color: lavender;
-  color: rgb(26, 26, 137) !important; /* Explicitly set text color on hover */
+  color: rgb(19, 19, 111) !important; /* Explicitly set text color on hover */
 }
 
 @keyframes flyIn {
